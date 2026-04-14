@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CityExplorer: Dolores Hidalgo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-gray-950 text-white">
+
+  <!-- ════ MODAL DE LOGIN ════ -->
+  <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+    <div class="bg-gray-900 border border-teal-500/30 rounded-2xl p-8 w-full max-w-md shadow-2xl mx-4">
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-2">🗺️</div>
+        <h2 class="text-2xl font-bold text-white">CityExplorer</h2>
+        <p class="text-gray-400 text-sm mt-1">Inicia sesión o continúa como visitante</p>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="text-gray-400 text-sm mb-1 block">Email</label>
+          <input id="login-email" type="email"
+            placeholder="admin@cityexplorer.com"
+            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5
+                   text-white text-sm placeholder-gray-500
+                   focus:outline-none focus:border-teal-500 transition" />
+        </div>
+        <div>
+          <label class="text-gray-400 text-sm mb-1 block">Contraseña</label>
+          <input id="login-password" type="password"
+            placeholder="••••••••"
+            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5
+                   text-white text-sm placeholder-gray-500
+                   focus:outline-none focus:border-teal-500 transition" />
+        </div>
+        <div id="login-error" class="text-red-400 text-sm hidden"></div>
+        <button id="login-btn"
+          class="w-full bg-teal-500 hover:bg-teal-400 text-white font-semibold
+                 py-2.5 rounded-lg transition text-sm">
+          Iniciar Sesión como Admin
+        </button>
+        <button id="guest-btn"
+          class="w-full bg-gray-800 hover:bg-gray-700 text-gray-300
+                 font-medium py-2.5 rounded-lg transition text-sm border border-gray-700">
+          Continuar como Visitante 👀
+        </button>
+      </div>
+      <p class="text-center text-gray-600 text-xs mt-4">
+        Credenciales admin: admin@cityexplorer.com / admin123
+      </p>
+    </div>
+  </div>
+
+  <!-- ════ NAVBAR ════ -->
+  <nav class="sticky top-0 z-40 bg-gray-900 border-b border-teal-600">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <h1 class="text-lg font-bold text-teal-400">🗺️ CityExplorer · Dolores Hidalgo</h1>
+      <div class="flex gap-4 text-sm text-gray-400 items-center">
+        <a href="#mapa"    class="hover:text-teal-400">Mapa</a>
+        <a href="#clima"   class="hover:text-teal-400">Clima</a>
+        <a href="#galeria" class="hover:text-teal-400">Galería</a>
+        <a href="#video"   class="hover:text-teal-400">Video</a>
+        <a href="#tienda"  class="hover:text-teal-400">Artesanías</a>
+        <a href="#lugares" class="hover:text-teal-400">Lugares</a>
+        <span id="nav-role-badge" class="hidden text-xs font-bold px-2 py-1 rounded-full bg-yellow-500 text-gray-900">👑 Admin</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════ PANEL ADMIN ════ -->
+  <div id="admin-panel" class="hidden max-w-7xl mx-auto px-4 mt-6">
+    <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-yellow-400 font-bold text-lg">⚙️ Panel de Administración</h3>
+        <div class="flex items-center gap-3">
+          <span id="admin-user-label" class="text-yellow-300 text-sm"></span>
+          <button onclick="window.adminLogout()"
+            class="bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs
+                   px-3 py-1.5 rounded-lg border border-gray-700 transition">
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+      <div class="bg-gray-900 rounded-xl p-4">
+        <h4 class="text-white font-semibold mb-3 text-sm">➕ Agregar Nuevo Lugar</h4>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <input id="new-emoji"    type="text"   placeholder="Emoji 🏛️"                        class="admin-input" />
+          <input id="new-name"     type="text"   placeholder="Nombre del lugar"                 class="admin-input" />
+          <input id="new-category" type="text"   placeholder="Categoría (historico, evento...)" class="admin-input" />
+          <input id="new-address"  type="text"   placeholder="Dirección"                        class="admin-input" />
+          <input id="new-rating"   type="number" placeholder="Rating (ej. 4.5)" step="0.1" min="0" max="5" class="admin-input" />
+          <input id="new-hours"    type="text"   placeholder="Horario (ej. 9:00 – 18:00)"      class="admin-input" />
+        </div>
+        <textarea id="new-description" placeholder="Descripción del lugar..." rows="2"
+          class="admin-input w-full mb-3"></textarea>
+        <div class="flex gap-3 items-center">
+          <button onclick="window.addPlace()"
+            class="bg-teal-500 hover:bg-teal-400 text-white text-sm
+                   font-medium px-4 py-2 rounded-lg transition">
+            Guardar Lugar
+          </button>
+          <span id="admin-status" class="text-sm text-gray-400"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ HERO ════ -->
+  <header class="hero-bg flex items-center justify-center min-h-72">
+    <div class="text-center px-4">
+      <p class="text-teal-400 text-sm uppercase tracking-widest mb-2">Cuna de la Independencia Nacional</p>
+      <h2 class="text-5xl font-extrabold">Dolores Hidalgo</h2>
+      <p class="text-gray-300 mt-2 text-lg">Explora su historia, cultura y arte.</p>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-10 space-y-12">
+
+    <!-- MAPA + CLIMA -->
+    <div class="grid md:grid-cols-3 gap-6">
+      <section id="mapa" class="md:col-span-2 card">
+        <h3 class="section-title">📍 Mapa Interactivo</h3>
+        <p class="text-gray-400 text-sm mb-3">Puntos de interés de Dolores Hidalgo.</p>
+        <div id="mapbox-container" class="rounded-xl h-72 w-full bg-gray-800">
+          <p id="map-loading" class="text-center text-gray-500 pt-28 text-sm">Cargando mapa…</p>
+        </div>
+        <p class="text-xs text-gray-600 mt-2">Mapbox GL JS</p>
+      </section>
+
+      <section id="clima" class="card flex flex-col justify-between">
+        <h3 class="section-title">🌤️ Clima Actual</h3>
+        <div id="weather-container" class="flex-1 flex items-center justify-center">
+          <div class="text-center">
+            <div id="weather-icon" class="text-7xl mb-2">⏳</div>
+            <div id="weather-temp" class="text-4xl font-bold text-teal-400">--°C</div>
+            <div id="weather-desc" class="text-gray-300 mt-1 capitalize">Cargando…</div>
+            <div id="weather-extra" class="text-gray-500 text-sm mt-3 space-y-1"></div>
+          </div>
+        </div>
+        <p class="text-xs text-gray-600 mt-4">OpenWeatherMap</p>
+      </section>
+    </div>
+
+    <!-- GALERÍA -->
+    <section id="galeria" class="card">
+      <h3 class="section-title">🖼️ Galería Fotográfica</h3>
+      <p class="text-gray-400 text-sm mb-4">Imágenes de la comunidad sobre arquitectura mexicana.</p>
+      <div id="unsplash-gallery" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div class="skeleton h-44 rounded-xl"></div>
+        <div class="skeleton h-44 rounded-xl"></div>
+        <div class="skeleton h-44 rounded-xl"></div>
+        <div class="skeleton h-44 rounded-xl"></div>
+      </div>
+      <p class="text-xs text-gray-600 mt-3">Unsplash API</p>
+    </section>
+
+    <!-- VIDEO + FAVORITOS -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <section id="video" class="card">
+        <h3 class="section-title">▶️ Video Turístico</h3>
+        <p class="text-gray-400 text-sm mb-3">Vlog de viajes por Dolores Hidalgo.</p>
+        <!-- Tamaño amigable con aspect ratio 16:9 -->
+        <div id="youtube-container" class="rounded-xl overflow-hidden bg-gray-800 w-full" style="aspect-ratio:16/9;">
+          <p class="text-center text-gray-500 pt-24 text-sm">Cargando video…</p>
+        </div>
+        <p class="text-xs text-gray-600 mt-2">YouTube IFrame API</p>
+      </section>
+
+      <section id="favoritos" class="card flex flex-col gap-4">
+        <h3 class="section-title">⭐ Mis Favoritos</h3>
+        <p class="text-gray-400 text-sm">Guarda los lugares que más te gustan.</p>
+        <div class="flex gap-2">
+          <input id="fav-input" type="text" placeholder="Nombre del lugar…"
+            class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2
+                   text-sm text-white placeholder-gray-500 focus:outline-none focus:border-teal-500" />
+          <button onclick="window.saveFavorite()"
+            class="bg-teal-500 hover:bg-teal-400 text-white text-sm font-medium px-4 py-2 rounded-lg">
+            Guardar
+          </button>
+        </div>
+        <div id="fav-status" class="text-xs text-gray-500"></div>
+        <ul id="fav-list" class="space-y-2 text-sm text-gray-300">
+          <li class="text-gray-600 italic">Sin favoritos aún.</li>
+        </ul>
+        <p class="text-xs text-gray-600 mt-auto">Supabase</p>
+      </section>
+    </div>
+
+    <!-- TIENDA -->
+    <section id="tienda" class="card">
+      <h3 class="section-title">🛍️ Artesanías y Souvenirs</h3>
+      <p class="text-gray-400 text-sm mb-4">Productos locales de Dolores Hidalgo.</p>
+      <div id="store-carousel" class="flex gap-4 overflow-x-auto pb-3">
+        <div class="skeleton min-w-48 h-64 rounded-xl"></div>
+        <div class="skeleton min-w-48 h-64 rounded-xl"></div>
+        <div class="skeleton min-w-48 h-64 rounded-xl"></div>
+      </div>
+      <p class="text-xs text-gray-600 mt-2">FakeStoreAPI</p>
+    </section>
+
+    <!-- LUGARES -->
+    <section id="lugares" class="card">
+      <h3 class="section-title">🏛️ Lugares & Eventos</h3>
+      <p class="text-gray-400 text-sm mb-4">
+        Datos curados del municipio.
+        <span class="text-teal-400 font-medium">[API Propia · Flask]</span>
+      </p>
+      <div class="flex gap-3 mb-4 flex-wrap">
+        <button class="filter-btn active" onclick="window.filterPlaces('all', event)">Todos</button>
+        <button class="filter-btn" onclick="window.filterPlaces('historico', event)">Histórico</button>
+        <button class="filter-btn" onclick="window.filterPlaces('gastronomia', event)">Gastronomía</button>
+        <button class="filter-btn" onclick="window.filterPlaces('artesania', event)">Artesanías</button>
+        <button class="filter-btn" onclick="window.filterPlaces('evento', event)">Eventos</button>
+      </div>
+      <div id="places-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="skeleton h-40 rounded-xl"></div>
+        <div class="skeleton h-40 rounded-xl"></div>
+        <div class="skeleton h-40 rounded-xl"></div>
+      </div>
+      <p class="text-xs text-gray-600 mt-3">CityExplorer API · Flask</p>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-gray-800 mt-12 py-6 text-center text-gray-600 text-sm">
+    <p>CityExplorer: Dolores Hidalgo · Proyecto SOA · 2026 · Team SOA-GTO</p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="services/authService.js"></script>
+  <script src="services/weatherService.js"></script>
+  <script src="services/mapboxService.js"></script>
+  <script src="services/unsplashService.js"></script>
+  <script src="services/youtubeService.js"></script>
+  <script src="services/storeService.js"></script>
+  <script src="services/supabaseService.js"></script>
+  <script src="services/cityExplorerService.js"></script>
+  <script src="main.js"></script>
+
+</body>
+</html>
