@@ -1,6 +1,6 @@
 const CityExplorerService = (() => {
 
-  const API_BASE = 'http://127.0.0.1:3000';
+  const API_BASE = 'https://city-explorer-dolores-hidalgo-production.up.railway.app';
   let allPlaces  = [];
 
   const buildCard = (p) => `
