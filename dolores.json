@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "emoji": "🏛️",
+    "name": "Jardín Principal",
+    "description": "Corazón histórico del municipio y escenario del Grito de Independencia en 1810.",
+    "category": "historico",
+    "address": "Centro Histórico, Dolores Hidalgo",
+    "coords": { "lat": 21.1561, "lng": -100.9308 },
+    "rating": 4.9,
+    "visitHours": "Abierto todo el día"
+  },
+  {
+    "id": 2,
+    "emoji": "⛪",
+    "name": "Parroquia de Nuestra Señora de los Dolores",
+    "description": "Templo barroco del siglo XVIII desde donde el Padre Hidalgo llamó al pueblo a la independencia.",
+    "category": "historico",
+    "address": "Plaza Principal s/n, Centro",
+    "coords": { "lat": 21.1563, "lng": -100.9305 },
+    "rating": 4.8,
+    "visitHours": "6:00 – 20:00"
+  },
+  {
+    "id": 3,
+    "emoji": "🏺",
+    "name": "Talavera de Dolores",
+    "description": "Cerámica artesanal pintada a mano con técnica única reconocida mundialmente.",
+    "category": "artesania",
+    "address": "Calle Guanajuato 4, Centro",
+    "coords": { "lat": 21.1548, "lng": -100.9311 },
+    "rating": 4.7,
+    "visitHours": "9:00 – 18:00"
+  },
+  {
+    "id": 4,
+    "emoji": "🍦",
+    "name": "Nieves de Sabores Exóticos",
+    "description": "Heladería famosa con más de 100 sabores únicos: elote, aguacate, xoconostle y tuna.",
+    "category": "gastronomia",
+    "address": "Portal Guadalupe 8, Jardín Principal",
+    "coords": { "lat": 21.1560, "lng": -100.9310 },
+    "rating": 4.9,
+    "visitHours": "10:00 – 21:00"
+  },
+  {
+    "id": 5,
+    "emoji": "🎭",
+    "name": "Museo Casa Hidalgo",
+    "description": "Residencia original del Padre de la Patria, hoy museo con objetos y documentos históricos.",
+    "category": "historico",
+    "address": "Morelos 1, Centro",
+    "coords": { "lat": 21.1557, "lng": -100.9302 },
+    "rating": 4.6,
+    "visitHours": "Martes-Domingo 10:00 – 17:00"
+  },
+  {
+    "id": 6,
+    "emoji": "🎉",
+    "name": "Feria de la Independencia",
+    "description": "Celebración anual en septiembre con fuegos artificiales, danzas y gastronomía regional.",
+    "category": "evento",
+    "address": "Jardín Principal y alrededores",
+    "coords": { "lat": 21.1561, "lng": -100.9308 },
+    "rating": 5.0,
+    "visitHours": "15-30 de septiembre"
+  },
+  {
+    "id": 7,
+    "emoji": "🫔",
+    "name": "Enchiladas Dolorenses",
+    "description": "Platillo emblemático de la región con chiles locales y queso fresco artesanal.",
+    "category": "gastronomia",
+    "address": "Mercado Municipal, Centro",
+    "coords": { "lat": 21.1552, "lng": -100.9315 },
+    "rating": 4.8,
+    "visitHours": "8:00 – 16:00"
+  },
+  {
+    "id": 8,
+    "emoji": "🎨",
+    "name": "Mercado de Artesanías",
+    "description": "Más de 50 talleres con piezas únicas de barro, textiles, vidrio soplado y madera tallada.",
+    "category": "artesania",
+    "address": "Av. Hidalgo s/n, Centro",
+    "coords": { "lat": 21.1545, "lng": -100.9320 },
+    "rating": 4.5,
+    "visitHours": "9:00 – 19:00"
+  },
+  {
+    "id": 9,
+    "emoji": "🎵",
+    "name": "Festival de Música Huapango",
+    "description": "Grupos de música tradicional en el Jardín Principal. Entrada libre cada fin de semana.",
+    "category": "evento",
+    "address": "Jardín Principal",
+    "coords": { "lat": 21.1561, "lng": -100.9308 },
+    "rating": 4.7,
+    "visitHours": "Viernes y Sábados 18:00 – 22:00"
+  },
+  {
+    "id": 10,
+    "emoji": "🏺",
+    "name": "Taller de Barro Negro",
+    "description": "Artesano local que elabora piezas de barro negro con técnica prehispánica heredada por generaciones.",
+    "category": "artesania",
+    "address": "Calle Puebla 12, Barrio de la Cruz",
+    "coords": { "lat": 21.1540, "lng": -100.9325 },
+    "rating": 4.8,
+    "visitHours": "9:00 – 17:00"
+  }
+]
