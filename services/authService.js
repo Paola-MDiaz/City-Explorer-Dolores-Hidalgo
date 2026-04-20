@@ -1,7 +1,7 @@
 const AuthService = (() => {
 
   // 🔧 Misma URL de tu API Flask
-  const API_BASE = 'http://127.0.0.1:3000';
+  const API_BASE = 'https://city-explorer-dolores-hidalgo-production.up.railway.app';
 
   // Token guardado en memoria (no en localStorage)
   let token = null;
